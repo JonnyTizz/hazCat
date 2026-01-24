@@ -2,7 +2,8 @@
   "name": "@jonnytizz/hazcat",
   "version": "0.0.1",
   "description": "Is there a cat in this image?!",
-  "main": "index.js",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "type": "module",
   "scripts": {
     "build": "tsc",
