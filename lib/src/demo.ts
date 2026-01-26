@@ -4,13 +4,14 @@ import { readFile } from "node:fs/promises";
 import { resolve } from "node:path";
 
 const apiKey = `Bearer ${process.env.OPEN_AI_KEY || ""}`;
+const baseUrl = process.env.HAZCAT_BASE_URL || "";
 
 console.log("Starting HazCat demo...");
 
 const hazCatClient = new HazCat({
   apiKey,
   model: "vercel/openai-gpt-5-nano",
-  baseUrl: "***REMOVED***",
+  baseUrl,
 });
 
 // const imagePath = resolve(process.cwd(), "test-images", "spiros.jpeg");
