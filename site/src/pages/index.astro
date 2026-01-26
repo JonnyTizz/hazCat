@@ -1,17 +1,54 @@
 ---
-import HazCatApp from '../components/HazCatApp';
+import '../styles/global.css';
+// Component Imports
+import { HazCatApp } from '@/components/HazCat';
+import Background from '@/components/background.astro';
+import { ModeToggle } from '@/components/ModeToggle';
+
+// Full Astro Component Syntax:
+// https://docs.astro.build/basics/astro-components/
 ---
+
+<script is:inline>
+  const getThemePreference = () => {
+    if (typeof localStorage !== 'undefined' && localStorage.getItem('theme')) {
+      return localStorage.getItem('theme');
+    }
+    return window.matchMedia('(prefers-color-scheme: dark)').matches
+      ? 'dark'
+      : 'light';
+  };
+  const isDark = getThemePreference() === 'dark';
+  document.documentElement.classList[isDark ? 'add' : 'remove']('dark');
+
+  if (typeof localStorage !== 'undefined') {
+    const observer = new MutationObserver(() => {
+      const isDark = document.documentElement.classList.contains('dark');
+      localStorage.setItem('theme', isDark ? 'dark' : 'light');
+    });
+    observer.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ['class'],
+    });
+  }
+</script>
 
 <html lang="en">
   <head>
     <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="icon" href="/favicon.ico" />
-    <meta name="viewport" content="width=device-width" />
     <meta name="generator" content={Astro.generator} />
-    <title>hazcat?</title>
+    <title>HazCat</title>
   </head>
+
   <body>
-    <HazCatApp client:load />
+    <Background />
+    <ModeToggle client:load />
+    <div class="grid place-items-center h-screen content-center max-sm:p-5">
+      <h1 class="text-9xl mb-4 font-cat">HazCat?</h1>
+      <HazCatApp client:load />
+    </div>
   </body>
 </html>

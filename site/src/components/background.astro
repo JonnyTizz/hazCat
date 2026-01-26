@@ -1,0 +1,105 @@
+---
+import '../styles/global.css';
+---
+
+<div class="emoji-bg" aria-hidden="true">
+  <div class="layer layer-even"></div>
+  <div class="layer layer-odd"></div>
+</div>
+
+<style>
+  :root {
+    --cell: 64px; /* size of each tile (width & height) */
+    --emoji: '🐈'; /* change this */
+    --speed: 3s; /* smaller = faster */
+  }
+
+  .emoji-bg {
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    overflow: hidden;
+    pointer-events: none;
+    opacity: 0.6;
+    /* background-color: oklch(var(--color-primary), 50%); */
+    background-color: oklch(from var(--color-primary) l c h / 10%);
+  }
+
+  /* Shared background tile: one emoji centered in an SVG square, repeated */
+  .layer {
+    position: absolute;
+    inset: 0;
+
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='64' height='64'><text x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' font-size='32'>🐈</text></svg>");
+
+    background-repeat: repeat;
+    background-size: var(--cell) var(--cell);
+    will-change: background-position;
+  }
+
+  /* Show only alternating rows by masking with a repeating linear gradient */
+  .layer-even {
+    -webkit-mask-image: repeating-linear-gradient(
+      to bottom,
+      #000 0,
+      #000 var(--cell),
+      transparent var(--cell),
+      transparent calc(var(--cell) * 2)
+    );
+    mask-image: repeating-linear-gradient(
+      to bottom,
+      #000 0,
+      #000 var(--cell),
+      transparent var(--cell),
+      transparent calc(var(--cell) * 2)
+    );
+
+    animation: scroll-left var(--speed) linear infinite;
+  }
+
+  .layer-odd {
+    -webkit-mask-image: repeating-linear-gradient(
+      to bottom,
+      transparent 0,
+      transparent var(--cell),
+      #000 var(--cell),
+      #000 calc(var(--cell) * 2)
+    );
+    mask-image: repeating-linear-gradient(
+      to bottom,
+      transparent 0,
+      transparent var(--cell),
+      #000 var(--cell),
+      #000 calc(var(--cell) * 2)
+    );
+
+    animation: scroll-right var(--speed) linear infinite;
+  }
+
+  /* Seamless loops: move by exactly one tile width */
+  @keyframes scroll-left {
+    from {
+      background-position: 0 0;
+    }
+    to {
+      background-position: calc(-1 * var(--cell)) 0;
+    }
+  }
+
+  @keyframes scroll-right {
+    from {
+      background-position: 0 0;
+    }
+    to {
+      background-position: var(--cell) 0;
+    }
+  }
+
+  /* Respect reduced motion */
+  @media (prefers-reduced-motion: reduce) {
+    .layer-even,
+    .layer-odd {
+      animation: none;
+    }
+  }
+</style>
