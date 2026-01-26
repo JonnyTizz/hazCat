@@ -1,66 +1,66 @@
 import OpenAI from "openai";
 import {
-	extractOutputText,
-	isFileSmallEnough,
-	isFileTypeValid,
-	parseHazCatResponse,
+  extractOutputText,
+  isFileSmallEnough,
+  isFileTypeValid,
+  parseHazCatResponse,
 } from "./helpers.js";
 import type { HazCatConfig, HazCatRequest, HazCatResponse } from "./types.js";
 
 export class HazCat {
-	private apiKey: string;
-	private model: string;
-	private baseUrl: string;
+  private apiKey: string;
+  private model: string;
+  private baseUrl: string;
 
-	constructor(config: HazCatConfig) {
-		this.apiKey = config.apiKey;
-		this.model = config.model;
-		this.baseUrl = config.baseUrl ?? "https://api.openai.com";
-	}
+  constructor(config: HazCatConfig) {
+    this.apiKey = config.apiKey;
+    this.model = config.model;
+    this.baseUrl = config.baseUrl ?? "https://api.openai.com";
+  }
 
-	public async hazCat({
-		catImage,
-		imageType,
-	}: HazCatRequest): Promise<HazCatResponse> {
-		if (!isFileSmallEnough(catImage)) {
-			throw new Error("File size exceeds the limit.");
-		}
+  public async hazCat({
+    catImage,
+    imageType,
+  }: HazCatRequest): Promise<HazCatResponse> {
+    if (!isFileSmallEnough(catImage)) {
+      throw new Error("File size exceeds the limit.");
+    }
 
-		if (!isFileTypeValid(imageType)) {
-			throw new Error("Invalid file type.");
-		}
+    if (!isFileTypeValid(imageType)) {
+      throw new Error("Invalid file type.");
+    }
 
-		const client = new OpenAI({
-			apiKey: this.apiKey,
-			baseURL: this.baseUrl,
-		});
+    const client = new OpenAI({
+      apiKey: this.apiKey,
+      baseURL: this.baseUrl,
+    });
 
-		const response = await client.responses.create({
-			model: this.model,
-			input: [
-				{
-					role: "system",
-					content: CAT_PROMPT,
-				},
-				{
-					role: "user",
-					content: [
-						{
-							type: "input_image",
-							image_url: `data:${imageType};base64,${catImage}`,
-							detail: "auto",
-						},
-					],
-				},
-			],
-		});
+    const response = await client.responses.create({
+      model: this.model,
+      input: [
+        {
+          role: "system",
+          content: CAT_PROMPT,
+        },
+        {
+          role: "user",
+          content: [
+            {
+              type: "input_image",
+              image_url: `data:${imageType};base64,${catImage}`,
+              detail: "auto",
+            },
+          ],
+        },
+      ],
+    });
 
-		const responseText = extractOutputText(response);
+    const responseText = extractOutputText(response);
 
-		const hazCatResponse: HazCatResponse = parseHazCatResponse(responseText);
+    const hazCatResponse: HazCatResponse = parseHazCatResponse(responseText);
 
-		return hazCatResponse;
-	}
+    return hazCatResponse;
+  }
 }
 
 const CAT_PROMPT = `

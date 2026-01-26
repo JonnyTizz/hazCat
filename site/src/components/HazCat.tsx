@@ -1,21 +1,21 @@
-import { Button } from '@/components/ui/button';
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardDescription,
   CardFooter,
   CardHeader,
   CardTitle,
-} from '@/components/ui/card';
-import { cn } from '@/lib/utils';
-import { useMutation } from '@tanstack/react-query';
-import { UploadIcon } from 'lucide-react';
-import React, { useRef } from 'react';
-import { useState } from 'react';
-import { Spinner } from './ui/spinner';
+} from "@/components/ui/card";
+import { cn } from "@/lib/utils";
+import { useMutation } from "@tanstack/react-query";
+import { UploadIcon } from "lucide-react";
+import React, { useRef } from "react";
+import { useState } from "react";
+import { Spinner } from "./ui/spinner";
 
-import { QueryProvider } from '@/components/QueryProvider';
+import { QueryProvider } from "@/components/QueryProvider";
 
-const SUPPORTED_TYPES = ['image/jpeg', 'image/png', 'image/webp', 'image/gif'];
+const SUPPORTED_TYPES = ["image/jpeg", "image/png", "image/webp", "image/gif"];
 
 type ParsedFile = {
   mime: string;
@@ -50,12 +50,12 @@ export const HazCat = () => {
   const { mutate, isPending, error } = useMutation({
     mutationFn: async () => {
       if (!imageData) {
-        throw new Error('No image data to send to HazCat');
+        throw new Error("No image data to send to HazCat");
       }
 
-      const res = await fetch('/api/hazcat', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+      const res = await fetch("/api/hazcat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           imageBase64: imageData.base64,
           imageType: imageData.mime,
@@ -73,7 +73,7 @@ export const HazCat = () => {
     },
     onError: (error) => {
       setResult(null);
-      console.error('Error during hazcat check:', error);
+      console.error("Error during hazcat check:", error);
     },
   });
 
@@ -97,7 +97,7 @@ export const HazCat = () => {
       {result && (
         <CardHeader>
           <CardTitle>
-            {result.hazCat ? 'Yay! Cat detected 🎉' : 'Aww, no cats here 🥺'}
+            {result.hazCat ? "Yay! Cat detected 🎉" : "Aww, no cats here 🥺"}
           </CardTitle>
           <CardDescription>{result.message}</CardDescription>
         </CardHeader>
@@ -113,7 +113,7 @@ export const HazCat = () => {
               <Spinner /> Checking…
             </>
           ) : (
-            'HazCat?'
+            "HazCat?"
           )}
         </Button>
       </CardFooter>
@@ -133,11 +133,11 @@ const FileInput = ({
   const inputRef = useRef<HTMLInputElement | null>(null);
   const [imageUrl, setImageUrl] = useState<string | null>(null);
   const [isDragActive, setDragActive] = useState(false);
-  const [message, setMessage] = useState<string>('');
+  const [message, setMessage] = useState<string>("");
   const dragDepth = React.useRef(0);
 
   const isFileDrag = (e: React.DragEvent) =>
-    Array.from(e.dataTransfer.types || []).includes('Files');
+    Array.from(e.dataTransfer.types || []).includes("Files");
 
   const onDragEnter = (e: React.DragEvent<HTMLDivElement>) => {
     if (disabled) return false;
@@ -204,20 +204,20 @@ const FileInput = ({
   const loadFile = (file: File) => {
     if (!SUPPORTED_TYPES.includes(file.type)) {
       setMessage(
-        'Unsupported file type. Please use jpeg, png, webp, or static gif.',
+        "Unsupported file type. Please use jpeg, png, webp, or static gif.",
       );
       return;
     }
 
     const reader = new FileReader();
     reader.onload = () => {
-      if (typeof reader.result !== 'string') {
+      if (typeof reader.result !== "string") {
         return;
       }
 
       const parsed = parseDataUrl(reader.result);
       if (!parsed) {
-        setMessage('Could not read that image. Try another file.');
+        setMessage("Could not read that image. Try another file.");
         return;
       }
 
@@ -231,7 +231,7 @@ const FileInput = ({
 
     reader.readAsDataURL(file);
 
-    setMessage('');
+    setMessage("");
   };
 
   return (
@@ -242,26 +242,26 @@ const FileInput = ({
       onDragLeave={onDragLeave}
       onClick={onPickClick}
       className={cn(
-        'grid place-items-center content-center m-2 overflow-hidden rounded-[6px]',
-        !disabled && 'cursor-pointer',
+        "grid place-items-center content-center m-2 overflow-hidden rounded-[6px]",
+        !disabled && "cursor-pointer",
         className,
       )}
     >
       <Card
         className={cn(
-          'rounded-[6px] col-start-1 row-start-1 border-dashed border-muted-foreground text-muted-foreground border-2 relative z-20 aspect-video w-full h-full object-cover bg-accent grid place-items-center content-center',
+          "rounded-[6px] col-start-1 row-start-1 border-dashed border-muted-foreground text-muted-foreground border-2 relative z-20 aspect-video w-full h-full object-cover bg-accent grid place-items-center content-center",
           !disabled &&
-            'hover:border-primary hover:text-primary hover:bg-transparent',
-          isDragActive && 'border-primary text-primary bg-transparent',
-          imageUrl && 'opacity-0 bg-none',
+            "hover:border-primary hover:text-primary hover:bg-transparent",
+          isDragActive && "border-primary text-primary bg-transparent",
+          imageUrl && "opacity-0 bg-none",
           imageUrl &&
             !disabled &&
-            ' hover:opacity-100 hover:bg-white/40 hover:text-black hover:border-black',
+            " hover:opacity-100 hover:bg-white/40 hover:text-black hover:border-black",
         )}
       >
         <span className="text-sm ">
           <UploadIcon className="inline-block mr-2 h-4 w-4" />
-          {message || 'Drag an image here, or click to select ...'}
+          {message || "Drag an image here, or click to select ..."}
         </span>
       </Card>
 
@@ -275,9 +275,9 @@ const FileInput = ({
       <input
         ref={inputRef}
         type="file"
-        accept={SUPPORTED_TYPES.join(',')}
+        accept={SUPPORTED_TYPES.join(",")}
         onChange={onInputChange}
-        style={{ display: 'none' }}
+        style={{ display: "none" }}
       />
     </div>
   );

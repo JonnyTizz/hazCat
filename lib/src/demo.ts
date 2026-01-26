@@ -8,9 +8,9 @@ const apiKey = `Bearer ${process.env.OPEN_AI_KEY || ""}`;
 console.log("Starting HazCat demo...");
 
 const hazCatClient = new HazCat({
-	apiKey,
-	model: "vercel/openai-gpt-5-nano",
-	baseUrl: "***REMOVED***",
+  apiKey,
+  model: "vercel/openai-gpt-5-nano",
+  baseUrl: "***REMOVED***",
 });
 
 // const imagePath = resolve(process.cwd(), "test-images", "spiros.jpeg");
@@ -27,8 +27,8 @@ const imagePath = resolve(process.cwd(), "test-images", "Garfield_the_Cat.png");
 const imageBase64 = (await readFile(imagePath)).toString("base64");
 
 const catResponse = await hazCatClient.hazCat({
-	catImage: imageBase64,
-	imageType: "image/png",
+  catImage: imageBase64,
+  imageType: "image/png",
 });
 
 console.log("HazCat request completed.");
