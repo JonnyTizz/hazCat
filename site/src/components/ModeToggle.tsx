@@ -1,31 +1,67 @@
-import * as React from 'react';
-import { Moon, Sun } from 'lucide-react';
+import * as React from "react";
+import { Moon, Sun } from "lucide-react";
 
-import { Button } from '@/components/ui/button';
+import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
+} from "@/components/ui/dropdown-menu";
 
 export function ModeToggle() {
+  const [systemThemeListener, setSystemThemeListener] = React.useState<
+    (() => void) | null
+  >(null);
   const [theme, setThemeState] = React.useState<
-    'theme-light' | 'dark' | 'system'
-  >('theme-light');
+    "theme-light" | "dark" | "system"
+  >("theme-light");
 
   React.useEffect(() => {
-    const isDarkMode = document.documentElement.classList.contains('dark');
-    setThemeState(isDarkMode ? 'dark' : 'theme-light');
+    const isDarkMode = document.documentElement.classList.contains("dark");
+    setThemeState(isDarkMode ? "dark" : "theme-light");
   }, []);
 
   React.useEffect(() => {
-    const isDark =
-      theme === 'dark' ||
-      (theme === 'system' &&
-        window.matchMedia('(prefers-color-scheme: dark)').matches);
-    document.documentElement.classList[isDark ? 'add' : 'remove']('dark');
-  }, [theme]);
+    if (theme === "system") {
+      const listener = (event: MediaQueryListEvent) => {
+        if (event.matches) {
+          document.documentElement.classList["add"]("dark");
+        } else {
+          document.documentElement.classList["remove"]("dark");
+        }
+      };
+
+      window
+        .matchMedia("(prefers-color-scheme: dark)")
+        .addEventListener("change", listener);
+
+      setSystemThemeListener(() => {
+        window
+          .matchMedia("(prefers-color-scheme: dark)")
+          .removeEventListener("change", listener);
+      });
+
+      return () => {
+        if (systemThemeListener) systemThemeListener();
+      };
+    }
+
+    if (systemThemeListener) {
+      systemThemeListener();
+      setSystemThemeListener(null);
+    }
+
+    if (theme === "theme-light") {
+      document.documentElement.classList["remove"]("dark");
+      return;
+    }
+
+    if (theme === "dark") {
+      document.documentElement.classList["add"]("dark");
+      return;
+    }
+  }, [theme, systemThemeListener]);
 
   return (
     <DropdownMenu>
@@ -37,13 +73,13 @@ export function ModeToggle() {
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
-        <DropdownMenuItem onClick={() => setThemeState('theme-light')}>
+        <DropdownMenuItem onClick={() => setThemeState("theme-light")}>
           Light
         </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => setThemeState('dark')}>
+        <DropdownMenuItem onClick={() => setThemeState("dark")}>
           Dark
         </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => setThemeState('system')}>
+        <DropdownMenuItem onClick={() => setThemeState("system")}>
           System
         </DropdownMenuItem>
       </DropdownMenuContent>
