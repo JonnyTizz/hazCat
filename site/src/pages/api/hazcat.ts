@@ -7,8 +7,6 @@ const requiredEnv = ["HAZCAT_API_KEY", "HAZCAT_MODEL"] as const;
 
 export const POST: APIRoute = async ({ request }) => {
   try {
-    console.log({ request });
-
     const env = import.meta.env;
     const missing = requiredEnv.filter((key) => !env[key]);
     if (missing.length > 0) {
@@ -21,8 +19,6 @@ export const POST: APIRoute = async ({ request }) => {
       imageBase64?: string;
       imageType?: "image/jpeg" | "image/png" | "image/gif" | "image/webp";
     };
-
-    console.log({ body });
 
     if (!body.imageBase64 || !body.imageType) {
       return new Response("Missing image data.", { status: 400 });
@@ -46,6 +42,10 @@ export const POST: APIRoute = async ({ request }) => {
   } catch (error) {
     const message =
       error instanceof Error ? error.message : "Unexpected error.";
+
+    console.error("HazCat API error:", error);
+    console.log("error message", message);
+
     return new Response(message, { status: 500 });
   }
 };
