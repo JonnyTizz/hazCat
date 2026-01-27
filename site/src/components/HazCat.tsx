@@ -78,8 +78,8 @@ export const HazCat = () => {
   });
 
   return (
-    <Card className="relative mx-auto w-full max-h-[90vh] max-w-2xl pt-0 backdrop-blur-sm bg-(--card)/20">
-      <div className="grid w-full h-full">
+    <Card className="relative mx-auto w-full max-h-[90vh] max-w-2xl pt-0 backdrop-blur-sm bg-(--card)/20 flex flex-col">
+      <div className="grid w-full flex-1 min-h-0">
         <FileInput
           className="col-start-1 row-start-1"
           disabled={isPending}
@@ -102,7 +102,7 @@ export const HazCat = () => {
           <CardDescription>{result.message}</CardDescription>
         </CardHeader>
       )}
-      <CardFooter>
+      <CardFooter className="mt-auto">
         <Button
           className="w-full disabled:opacity-100 disabled:grayscale-50"
           disabled={!imageData || isPending}
@@ -242,7 +242,7 @@ const FileInput = ({
       onDragLeave={onDragLeave}
       onClick={onPickClick}
       className={cn(
-        "grid place-items-center content-center m-2 overflow-hidden rounded-[6px]",
+        "grid place-items-center content-center m-2 overflow-hidden rounded-[6px] h-full min-h-0",
         !disabled && "cursor-pointer",
         className,
       )}
@@ -269,7 +269,7 @@ const FileInput = ({
         <img
           src={imageUrl}
           alt="Uploaded"
-          className="rounded-[6px] col-start-1 row-start-1 w-full h-full  object-contain transition"
+          className="rounded-[6px] col-start-1 row-start-1 w-auto h-auto max-h-full max-w-full object-contain transition"
         />
       )}
       <input
