@@ -2,15 +2,43 @@
   "name": "@jonnytizz/hazcat",
   "version": "0.0.1",
   "description": "Is there a cat in this image?!",
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
+  "homepage": "https://github.com/JonnyTizz/hazcat/lib#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/JonnyTizz/hazcat.git"
+  },
+  "bugs": {
+    "url": "https://github.com/JonnyTizz/hazcat/issues"
+  },
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.cts",
+  "exports": {
+    ".": {
+      "require": {
+        "types": "./dist/index.d.cts",
+        "default": "./dist/index.cjs"
+      },
+      "import": {
+        "types": "./dist/index.d.mts",
+        "default": "./dist/index.mjs"
+      }
+    },
+    "./package.json": "./package.json"
+  },
   "type": "module",
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
   "scripts": {
     "build": "tsc",
     "watch": "tsc -w",
     "start": "node dist/index.js",
     "dev": "tsc -w",
     "hazcat": "node dist/demo.js"
+    "prepublishOnly": "npm run build"
   },
   "author": "Jon Tizzard",
   "license": "MIT",
