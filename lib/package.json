@@ -1,8 +1,8 @@
 {
   "name": "@jonnytizz/hazcat",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Is there a cat in this image?!",
-  "homepage": "https://github.com/JonnyTizz/hazcat/tree/main/lib#readme",
+  "homepage": "https://github.com/JonnyTizz/hazcat/tree/main/lib",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/JonnyTizz/hazcat.git"
