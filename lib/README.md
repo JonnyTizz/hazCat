@@ -1,5 +1,7 @@
 # HazCat
 
+[![NPM Downloads](https://img.shields.io/npm/dw/%40jonnytizz%2Fhazcat?logo=npm)](https://www.npmjs.com/package/@jonnytizz/hazcat) [![Static Badge](https://img.shields.io/badge/github-repo-blue?logo=github&link=https%3A%2F%2Fgithub.com%2FJonnyTizz%2FhazCat)](https://github.com/JonnyTizz/hazCat/tree/main/lib)
+
 Because disappointment is expensive and sadness is measurable.
 
 HazCat is the premium-grade, nonsense-powered module that keeps users safe from the crushing void of looking at a picture and realizing there is no cat in it. It’s a simple promise: if there’s a picture, you’ll **know** whether there’s a cat. HazCat doesn’t add cats; it adds clarity. Your users will never again experience the **soul-sinking moment of not finding a cat** without at least getting a polite, mildly sad report first.
