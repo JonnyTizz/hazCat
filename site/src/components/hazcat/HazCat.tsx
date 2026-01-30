@@ -31,15 +31,13 @@ export function HazCat() {
     useHazCat();
 
   return (
-    <Card className="relative mx-auto w-full max-h-[90vh] max-w-2xl pt-0 backdrop-blur-sm bg-(--card)/20 flex flex-col">
-      <div className="grid w-full flex-1 min-h-0">
-        <FileInput
-          className="col-start-1 row-start-1"
-          disabled={isPending}
-          onFileChange={setImage}
-        />
-        {isPending && <LoadingOverlay />}
-      </div>
+    <Card className="relative mx-auto w-full max-w-2xl h-full pt-0 backdrop-blur-sm bg-(--card)/20 flex flex-col min-h-0 overflow-hidden">
+      <FileInput
+        className="flex-1 min-h-0 overflow-hidden"
+        disabled={isPending}
+        isLoading={isPending}
+        onFileChange={setImage}
+      />
 
       <ResultDisplay result={result} error={error} isError={isError} />
 
@@ -59,14 +57,6 @@ export function HazCat() {
         </Button>
       </CardFooter>
     </Card>
-  );
-}
-
-function LoadingOverlay() {
-  return (
-    <div className="col-start-1 row-start-1 w-full h-full grid place-items-center content-center m-2 overflow-hidden rounded-[6px] bg-white/30 z-50">
-      <Spinner className="size-12 z-50 text-primary" />
-    </div>
   );
 }
 

@@ -8,16 +8,19 @@ import {
   parseDataUrl,
   SUPPORTED_IMAGE_TYPES_STRING,
 } from "./utils";
+import { Spinner } from "@/components/ui/spinner";
 
 type FileInputProps = {
   className?: string;
   disabled?: boolean;
+  isLoading?: boolean;
   onFileChange: (fileData: ParsedFile) => void;
 };
 
 export function FileInput({
   className,
   disabled = false,
+  isLoading = false,
   onFileChange,
 }: FileInputProps) {
   const inputRef = useRef<HTMLInputElement | null>(null);
@@ -128,35 +131,55 @@ export function FileInput({
       onDragLeave={onDragLeave}
       onClick={onPickClick}
       className={cn(
-        "grid place-items-center content-center m-2 overflow-hidden rounded-[6px] h-full min-h-0",
+        "flex items-center justify-center p-2 overflow-hidden rounded-[6px] h-full min-h-0",
         !disabled && "cursor-pointer",
         className,
       )}
     >
-      <Card
-        className={cn(
-          "rounded-[6px] col-start-1 row-start-1 border-dashed border-muted-foreground text-muted-foreground border-2 relative z-20 aspect-video w-full h-full object-cover bg-accent grid place-items-center content-center",
-          !disabled &&
-            "hover:border-primary hover:text-primary hover:bg-transparent",
-          isDragActive && "border-primary text-primary bg-transparent",
-          imageUrl && "opacity-0 bg-none",
-          imageUrl &&
+      {/* Placeholder card shown when no image */}
+      {!imageUrl && (
+        <Card
+          className={cn(
+            "rounded-[6px] border-dashed border-muted-foreground text-muted-foreground border-2 aspect-video w-full bg-accent grid place-items-center content-center",
             !disabled &&
-            "hover:opacity-100 hover:bg-white/40 hover:text-black hover:border-black",
-        )}
-      >
-        <span className="text-sm">
-          <UploadIcon className="inline-block mr-2 h-4 w-4" />
-          {message || "Drag an image here, or click to select ..."}
-        </span>
-      </Card>
+              "hover:border-primary hover:text-primary hover:bg-transparent",
+            isDragActive && "border-primary text-primary bg-transparent",
+          )}
+        >
+          <span className="text-sm">
+            <UploadIcon className="inline-block mr-2 h-4 w-4" />
+            {message || "Drag an image here, or click to select ..."}
+          </span>
+        </Card>
+      )}
 
+      {/* Image with loading overlay container */}
       {imageUrl && (
-        <img
-          src={imageUrl}
-          alt="Uploaded"
-          className="rounded-[6px] col-start-1 row-start-1 w-auto h-auto max-h-full max-w-full object-contain transition"
-        />
+        <div className="relative h-full max-w-full min-h-0 min-w-0 flex items-center justify-center">
+          <img
+            src={imageUrl}
+            alt="Uploaded"
+            className="rounded-[6px] max-h-full max-w-full object-contain transition block"
+          />
+          {/* Hover overlay for re-upload */}
+          <div
+            className={cn(
+              "absolute inset-0 rounded-[6px] border-dashed border-2 border-transparent grid place-items-center opacity-0 transition-opacity",
+              !disabled &&
+                "hover:opacity-100 hover:bg-white/40 hover:border-black hover:text-black",
+            )}
+          >
+            <span className="text-sm">
+              <UploadIcon className="inline-block mr-2 h-4 w-4" />
+              Click or drag to change image
+            </span>
+          </div>
+          {isLoading && (
+            <div className="absolute inset-0 grid place-items-center rounded-[6px] bg-white/30 z-50">
+              <Spinner className="size-12 text-primary" />
+            </div>
+          )}
+        </div>
       )}
       <input
         ref={inputRef}

@@ -43,14 +43,16 @@ import { ModeToggle } from '@/components/ModeToggle';
     <title>HazCat</title>
   </head>
 
-  <body>
+  <body class="h-screen overflow-hidden">
     <Background />
-    <div class="absolute top-3 right-3">
+    <div class="absolute top-3 right-3 z-10">
       <ModeToggle client:load />
     </div>
-    <div class="grid place-items-center h-screen content-center max-sm:p-5">
-      <h1 class="text-9xl mb-4 font-cat">HazCat?</h1>
-      <HazCatApp client:load />
+    <div class="flex flex-col items-center justify-center h-full p-5 gap-4">
+      <h1 class="text-9xl font-cat shrink-0">HazCat?</h1>
+      <div class="min-h-0 w-full max-w-2xl overflow-hidden">
+        <HazCatApp client:load />
+      </div>
     </div>
   </body>
 </html>
