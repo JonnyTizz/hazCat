@@ -1,6 +1,6 @@
 {
   "name": "@jonnytizz/hazcat",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Is there a cat in this image?!",
   "homepage": "https://github.com/JonnyTizz/hazcat/lib#readme",
   "repository": {
@@ -15,14 +15,8 @@
   "types": "./dist/index.d.cts",
   "exports": {
     ".": {
-      "require": {
-        "types": "./dist/index.d.cts",
-        "default": "./dist/index.cjs"
-      },
-      "import": {
-        "types": "./dist/index.d.mts",
-        "default": "./dist/index.mjs"
-      }
+      "require": "./dist/index.cjs",
+      "import": "./dist/index.mjs"
     },
     "./package.json": "./package.json"
   },
