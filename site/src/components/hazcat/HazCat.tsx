@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -11,6 +12,8 @@ import { QueryProvider } from "@/components/QueryProvider";
 import { FileInput } from "./FileInput";
 import { useHazCat } from "./hooks/useHazCat";
 import { getErrorMessage } from "./utils";
+import { triggerConfetti } from "./effects";
+import { BlueRain } from "./BlueRain";
 
 /**
  * Main HazCat app wrapper with QueryProvider
@@ -27,36 +30,49 @@ export function HazCatApp() {
  * HazCat component - checks if an image contains a cat
  */
 export function HazCat() {
+  const [showRain, setShowRain] = useState(false);
+
   const { result, error, isPending, isError, canCheck, setImage, check } =
-    useHazCat();
+    useHazCat({
+      onSuccess: (data) => {
+        if (data.hazCat) {
+          triggerConfetti();
+        } else {
+          setShowRain(true);
+        }
+      },
+    });
 
   return (
-    <Card className="relative mx-auto w-full max-w-2xl h-full pt-0 backdrop-blur-sm bg-(--card)/20 flex flex-col min-h-0 overflow-hidden">
-      <FileInput
-        className="flex-1 min-h-0 overflow-hidden"
-        disabled={isPending}
-        isLoading={isPending}
-        onFileChange={setImage}
-      />
+    <>
+      {showRain && <BlueRain onComplete={() => setShowRain(false)} />}
+      <Card className="relative mx-auto w-full max-w-2xl h-full pt-0 backdrop-blur-sm bg-(--card)/20 flex flex-col min-h-0 overflow-hidden">
+        <FileInput
+          className="flex-1 min-h-0 overflow-hidden"
+          disabled={isPending}
+          isLoading={isPending}
+          onFileChange={setImage}
+        />
 
-      <ResultDisplay result={result} error={error} isError={isError} />
+        <ResultDisplay result={result} error={error} isError={isError} />
 
-      <CardFooter className="mt-auto">
-        <Button
-          className="w-full disabled:opacity-100 disabled:grayscale-50"
-          disabled={!canCheck}
-          onClick={check}
-        >
-          {isPending ? (
-            <>
-              <Spinner /> Checking…
-            </>
-          ) : (
-            "HazCat?"
-          )}
-        </Button>
-      </CardFooter>
-    </Card>
+        <CardFooter className="mt-auto">
+          <Button
+            className="w-full disabled:opacity-100 disabled:grayscale-50"
+            disabled={!canCheck}
+            onClick={check}
+          >
+            {isPending ? (
+              <>
+                <Spinner /> Checking…
+              </>
+            ) : (
+              "HazCat?"
+            )}
+          </Button>
+        </CardFooter>
+      </Card>
+    </>
   );
 }
 

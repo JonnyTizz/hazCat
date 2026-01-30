@@ -136,3 +136,17 @@
     @apply font-sans;
   }
 }
+
+/* Blue rain animation for no-cat result */
+@keyframes rain-fall {
+  0% {
+    transform: translateY(-20px);
+  }
+  100% {
+    transform: translateY(100vh);
+  }
+}
+
+.animate-rain-fall {
+  animation: rain-fall linear infinite;
+}
